@@ -4,6 +4,22 @@ Este proyecto sera para poner en practica mis conosimientos en el Backend con
 el uso de FastAPI. Tambien usaremos las bibliotecas de pydantic para el uso de 
 modelos, passlib para la encriptacion de contraseñas y jose para el uso de tokens.
 
+### Caracteristicas ###
+- User:
+    - Tendra un carrito de compras
+    - Tendra lista de deseos
+    - Historial de compras
+    - Se podra regsitrar y logear
+    - Podra vender objetos
+    - Se verificara la existacia de su correo 
+    - Tendra un perfil donde se mostrara lo que vende
+- Articulo
+    - Foto
+    - Nombre
+    - Descripcion
+    - Precio
+    - Comentarios
+
 ### Inicializacion del Proyecto ###
 
 - Instalacion de bibliotecas: pip install -r requirements.txt
@@ -13,6 +29,10 @@ modelos, passlib para la encriptacion de contraseñas y jose para el uso de toke
 
 - main.py: Este archivo se ubica en la raiz del proyecto y contiene la inicializacion del
 servidor y conexion con las subrutas y configuracion de la ApiCORS.
+
+
+### Enlaces ###
+https://lucid.app/lucidchart/54fcf709-f75d-4088-ba68-986eb94d3ab1/edit?invitationId=inv_abca1c0d-5662-4fa7-b041-757b33f0669b
 
 
 
