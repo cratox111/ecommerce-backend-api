@@ -43,8 +43,12 @@ en el proyecto
 y password usando el modelo UserForm creado en el archivo /db/client.py. Al momento de guardar la contraseña 
 la hashea mediante el algoritmo argon2. 
 
-### Funciones ###
+- /auth/login: Se encarga de logear a los usuarios usando OAuth2PasswordRequestForm, esto pide username(en este
+caso realmete lo que esta ingresando es el email) y password. En caso que de que los datos sean correctos retornara
+un token.
 
+### Funciones ###
+search_user(key, value): esta funcion busca un user en la db y retorna un objecto con estrutura tipo Json
 
 ### Variables ###
 URL_DB: Esta varaible de entorno contiene la ubicasion del servidor que contiene la DataBase.

@@ -1,6 +1,7 @@
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import APIRouter, HTTPException, status, Depends
 from passlib.context import CryptContext
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from jose import jwt
 import os
@@ -24,7 +25,7 @@ def search_user(key, value):
     return user
 
 @router.post('/register', status_code=201)
-async def regsiter(data_user: UserForm):
+async def register(data_user: UserForm):
     if search_user(key='email', value=data_user.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -36,12 +37,29 @@ async def regsiter(data_user: UserForm):
     data_user.password = hash_password
 
     user = dict(data_user)
-    users.insert_one(user)
+    users.insert_one(user).inserted_id
 
     return {'msg': 'User creado'}
 
 @router.post('/login', status_code=200)
-async def login(user:OAuth2PasswordRequestForm):
-    pass
+async def login(data: OAuth2PasswordRequestForm = Depends()):
+    user = search_user(key='email', value=data.username)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='El usuario no existe'
+        )
+    
+    if not crypt.verify(data.password, user['password']):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Contraseña incorrecta'
+        )
 
+    token = jwt.encode({
+        'sub': user['email'],
+        'exp': datetime.utcnow() + timedelta(minutes=30)
+    }, SECRET, algorithm='HS256')
+
+    return {'access_token': token, 'token_type': 'bearer'}
     
