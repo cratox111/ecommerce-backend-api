@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from bson import ObjectId
 from typing import Optional
 
 class UserForm(BaseModel):
@@ -17,7 +18,8 @@ class UserDB(BaseModel):
     type_account: str
 
 class UserResponse(BaseModel):
-    id: str
     name: str
     email: str
+    shopping_cart: Optional[list] = None
+    wish_list: Optional[list] = None
     type_account: str

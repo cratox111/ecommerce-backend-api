@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-from jose import jwt
+from jose import jwt, JWTError, ExpiredSignatureError
 import os
 
 from db.schemas.model_user import UserDB, UserForm, UserResponse
@@ -23,6 +23,28 @@ def search_user(key, value):
         return None
     
     return user
+
+def auth_user(token = Depends(oauth)):   
+    try:
+        token = jwt.decode(token=token, key=SECRET, algorithms=['HS256'])
+        user = search_user(key='email', value=token['sub'])
+
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail='User no existe'
+            )
+
+        del user['_id']
+    except (JWTError, ExpiredSignatureError):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='No tienes token o a expirado'
+        )
+
+
+
+    return UserResponse(**user)
 
 @router.post('/register', status_code=201)
 async def register(data_user: UserForm):
