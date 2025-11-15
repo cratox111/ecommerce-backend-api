@@ -6,7 +6,6 @@ class UserForm(BaseModel):
     name: str
     email: str
     password: str
-    type_account: str
 
 class UserDB(BaseModel):
     id: str
@@ -15,11 +14,12 @@ class UserDB(BaseModel):
     password: str
     shopping_cart: Optional[list]
     wish_list: Optional[list]
-    type_account: str
 
 class UserResponse(BaseModel):
     name: str
     email: str
     shopping_cart: Optional[list] = None
     wish_list: Optional[list] = None
-    type_account: str
+
+class VerifyCode(BaseModel):
+    input: str

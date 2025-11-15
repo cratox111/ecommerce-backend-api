@@ -9,3 +9,4 @@ client = MongoClient(os.getenv('URL_DB'))
 db = client.shop
 
 users = db.users
+producs = db.producs

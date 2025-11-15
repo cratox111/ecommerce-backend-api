@@ -39,24 +39,42 @@ en el proyecto
 - model_user.py: Este archivo contiene los modelos de UserForm, UserDB, UserResponse
 
 ### Rutas ###
-- /auth/register: Se encarga de registrar a los usuario pidiendo los campos de name, email
+- /auth/register: Se encarga de pre-registrar a los usuario pidiendo los campos de name, email
 y password usando el modelo UserForm creado en el archivo /db/client.py. Al momento de guardar la contraseña 
-la hashea mediante el algoritmo argon2. 
+la hashea mediante el algoritmo argon2. Esto retornara un token que contiene la info ingresada del usuario
+y aparte manda un codigo de 3 digitos al correo que ingreso el user.
 
 - /auth/login: Se encarga de logear a los usuarios usando OAuth2PasswordRequestForm, esto pide username(en este
 caso realmete lo que esta ingresando es el email) y password. En caso que de que los datos sean correctos retornara
 un token.
 
+- /auth/register/verify: Esta ruta se encarga de verificar que el codigo que ingresa el usuario se igual al que se 
+le mando por correo. En caso que el codigo coincida se guarda el usuario en la db.
+
 ### Funciones ###
-search_user(key, value): esta funcion busca un user en la db y retorna un objecto con estrutura tipo Json
+- search_user(key, value): esta funcion busca un user en la db y retorna un objecto con estrutura tipo Json
+- auth_user(token): Se encarga de verificar que el usuario contenga un token vigente en caso que no lo tenga retorna un error 404 y 
+retorna la info del usuario(name, email, shopping_car y wish_list).
+- verify_mail(token): Se encarga de veridicar la existencia de un correo. Verifacando que el codigo ingresado sea igual al codigo que
+recibio por correo
 
 ### Variables ###
 URL_DB: Esta varaible de entorno contiene la ubicasion del servidor que contiene la DataBase.
 SECRET: Esta variable de entorno contiene 
 users: Es una referencia a la tabla de users en la DB Mongo
 
+
+### REGISTRO DE USUARIOS ###
+Para el registro de usuarios primero debo verifcar que el correo exista para ello mando un correo con un codigo de 3 digitos
+El proceso de registro queda masomenos asi(para mejor comprencion ve a la direccion de Diagramas al ultimo):
+1. El usuario ingresa sus datos
+2. Luego se genera un token que contiene el sub(email ingresado), el exp(5 minutos) y 
+data(info ingresada por el usuario: name, email, password) y se envia un correo con el codigo
+3. Luego en la ruta /register/verify el usuario ingresa el codigo que le llego y si coincide ya se guarda la ingo en la db
+
 ### Enlaces ###
-https://lucid.app/lucidchart/54fcf709-f75d-4088-ba68-986eb94d3ab1/edit?invitationId=inv_abca1c0d-5662-4fa7-b041-757b33f0669b
+
+Diagramas: https://lucid.app/lucidchart/54fcf709-f75d-4088-ba68-986eb94d3ab1/edit?invitationId=inv_abca1c0d-5662-4fa7-b041-757b33f0669b
 
 
 
